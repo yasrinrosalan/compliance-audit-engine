@@ -1,4 +1,3 @@
-```markdown
 # Enterprise Document Compliance & Semantic Audit Engine
 
 A local, zero-cost AI backend for processing and auditing enterprise PDF documents. This project uses a Retrieval-Augmented Generation (RAG) pipeline to perform semantic searches and generate compliance answers without sending sensitive data to the cloud.
@@ -13,16 +12,14 @@ A local, zero-cost AI backend for processing and auditing enterprise PDF documen
 ## How to Run
 
 1. **Clone the repository:**
-   ```bash
+```bash
    git clone [https://github.com/yourusername/compliance-audit-engine.git](https://github.com/yourusername/compliance-audit-engine.git)
    cd compliance-audit-engine
-
 ```
 
 2. **Start the Docker containers:**
 ```bash
-docker compose up -d --build
-
+   docker compose up -d --build
 ```
 
 
@@ -42,7 +39,3 @@ Navigate to [http://localhost:8000/docs](http://localhost:8000/docs) in your bro
 * `POST /api/v1/documents/upload` - Uploads a PDF and sends it to the background worker for extraction and chunking.
 * `POST /api/v1/documents/search` - Searches the PostgreSQL vector database for semantically similar text chunks.
 * `POST /api/v1/documents/ask` - Uses Llama 3 to generate a final, source-cited answer based on the document context.
-
-```
-
-```
