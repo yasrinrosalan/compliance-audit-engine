@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    container_name: compliance_api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app/app
+      - ./data/uploads:/app/uploads
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - audit_network
+
+  worker:
+    build: .
+    container_name: compliance_worker
+    command: celery -A app.services.tasks worker --loglevel=info
+    volumes:
+      - ./app:/app/app
+      - ./data/uploads:/app/uploads
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - audit_network
+
+  postgres:
+    image: ankane/pgvector:latest
+    container_name: compliance_db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: audit_admin
+      POSTGRES_PASSWORD: secure_dev_password
+      POSTGRES_DB: compliance_vault
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - audit_network
+
+  redis:
+    image: redis:7-alpine
+    container_name: compliance_cache
+    ports:
+      - "6379:6379"
+    networks:
+      - audit_network
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: compliance_ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - audit_network
+
+networks:
+  audit_network:
+    driver: bridge
+
+volumes:
+  pgdata:
+  ollama_data:
